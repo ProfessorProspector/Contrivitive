@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+def ENV = System.getenv()
+if (ENV.BUILD_NUMBER) {
+    version = mcver + "-" + modver + "-" + "${System.getenv().BUILD_NUMBER}"
+} else {
+    version = mcver + "-" + modver + "-CustomBuild"
+}
+
+group = groupname
+archivesBaseName = jarname
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = mcver + "-" + forgever
+    runDir = "run"
+    mappings = mcpver
+
+    replaceIn "ContrivitiveConstants.java"
+    replace "@version@", project.version
+    replace "@mcversion@", project.mcver
+    replace "@forgeversion@", project.forgever
+    
+    replaceIn "mcmod.info"
+    replace "@version@", project.version
+    replace "@mcversion@", project.mcver
+}
+
+dependencies {
+
+}
+
+processResources {
+
+}
