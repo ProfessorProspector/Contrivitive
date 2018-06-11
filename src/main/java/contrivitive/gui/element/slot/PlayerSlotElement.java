@@ -4,12 +4,11 @@ import contrivitive.gui.element.Element;
 import contrivitive.gui.element.sprite.Sprites;
 
 public class PlayerSlotElement extends Element {
-	int x, y, index;
+	int x, y;
 
-	public PlayerSlotElement(int x, int y, int index) {
+	public PlayerSlotElement(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.index = index;
 		sprite(Sprites.SLOT_NORMAL);
 	}
 
@@ -19,9 +18,5 @@ public class PlayerSlotElement extends Element {
 
 	public int getY() {
 		return y + 1;
-	}
-
-	public int getIndex() {
-		return index;
 	}
 }

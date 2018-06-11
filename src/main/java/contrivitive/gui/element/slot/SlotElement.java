@@ -3,38 +3,24 @@ package contrivitive.gui.element.slot;
 import contrivitive.gui.GuiBlueprint;
 import contrivitive.gui.element.Element;
 import contrivitive.util.ContrivitiveSlot;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class SlotElement<B extends GuiBlueprint> extends Element {
-	public ContrivitiveSlot.SlotFilter filter;
-	protected ItemStackHandler slotInventory;
+	protected ContrivitiveSlot.SlotFilter filter = null;
+	protected String slotTexture = null;
+	protected int stackSize = 64;
 	protected SlotType type;
-	int slotId = -1, slotX, slotY;
+	protected int slotX, slotY;
 
-	public SlotElement(ItemStackHandler slotInventory, int slotX, int slotY, SlotType type, ContrivitiveSlot.SlotFilter filter) {
+	public SlotElement(int slotX, int slotY, SlotType type) {
 		super(type.getSprite().width, type.getSprite().height);
 		sprite(type.getSprite());
 		this.type = type;
-		this.slotInventory = slotInventory;
 		this.slotX = slotX;
 		this.slotY = slotY;
-		this.filter = filter;
 	}
 
 	public SlotType getType() {
 		return type;
-	}
-
-	public ItemStackHandler getSlotInventory() {
-		return slotInventory;
-	}
-
-	public int getSlotId() {
-		return slotId;
-	}
-
-	public void setSlotId(int slotId) {
-		this.slotId = slotId;
 	}
 
 	public int getSlotX() {
@@ -43,5 +29,32 @@ public class SlotElement<B extends GuiBlueprint> extends Element {
 
 	public int getSlotY() {
 		return slotY;
+	}
+
+	public ContrivitiveSlot.SlotFilter getFilter() {
+		return filter;
+	}
+
+	public SlotElement setFilter(ContrivitiveSlot.SlotFilter filter) {
+		this.filter = filter;
+		return this;
+	}
+
+	public String getSlotTexture() {
+		return slotTexture;
+	}
+
+	public SlotElement setSlotTexture(String slotTexture) {
+		this.slotTexture = slotTexture;
+		return this;
+	}
+
+	public int getStackSize() {
+		return stackSize;
+	}
+
+	public SlotElement setStackSize(int stackSize) {
+		this.stackSize = stackSize;
+		return this;
 	}
 }

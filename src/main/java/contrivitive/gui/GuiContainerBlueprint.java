@@ -5,10 +5,10 @@ import contrivitive.gui.element.slot.SlotElement;
 import contrivitive.gui.element.slot.SlotType;
 import contrivitive.util.ContrivitiveSlot;
 import contrivitive.util.Pair;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
@@ -16,17 +16,18 @@ public class GuiContainerBlueprint extends GuiBlueprint {
 
 	public int playerInvX = -1;
 	public int playerInvY = -1;
-	public List<SlotElement> slots = new ArrayList<>();
-	public List<PlayerSlotElement> playerSlots = new ArrayList<>();
+	public HashMap<Integer, SlotEntry> slots = new HashMap<>();
+	public HashMap<Integer, PlayerSlotElement> playerSlots = new HashMap<>();
+	public boolean justPlayerInv = true;
 
 	public GuiContainerBlueprint(int width, int height) {
 		super(width, height);
 	}
 
 	public GuiContainerBlueprint addPlayerSlot(String page, int x, int y, int index) {
-		PlayerSlotElement element = new PlayerSlotElement(x, y, index);
+		PlayerSlotElement element = new PlayerSlotElement(x, y);
 		at(x, y, element);
-		playerSlots.add(element);
+		playerSlots.put(index, element);
 		return this;
 	}
 
@@ -34,41 +35,41 @@ public class GuiContainerBlueprint extends GuiBlueprint {
 		return addPlayerSlot("main", x, y, index);
 	}
 
-	public GuiContainerBlueprint addSlot(String page, SlotElement slot) {
-		slot.setSlotId(slots.size());
-		this.slots.add(slot);
+	public GuiContainerBlueprint addSlot(String page, SlotElement slot, IItemHandler inventory) {
+		this.slots.put(slots.size(), new SlotEntry(slot, inventory));
+		justPlayerInv = false;
 		at(page, slot.getSlotX(), slot.getSlotY(), slot);
 		return this;
 	}
 
-	public GuiContainerBlueprint addSlot(String page, ItemStackHandler inventory, SlotType type, int x, int y) {
-		addSlot(page, new SlotElement(inventory, x + type.getSlotOffsetX(), y + type.getSlotOffsetY(), type, (slot, stack) -> true));
+	public GuiContainerBlueprint addSlot(String page, IItemHandler inventory, SlotType type, int x, int y) {
+		addSlot(page, new SlotElement(x + type.getSlotOffsetX(), y + type.getSlotOffsetY(), type), inventory);
 		return this;
 	}
 
-	public GuiContainerBlueprint addSlot(String page, ItemStackHandler inventory, int x, int y) {
+	public GuiContainerBlueprint addSlot(String page, IItemHandler inventory, int x, int y) {
 		return addSlot(page, inventory, SlotType.NORMAL, x, y);
 	}
 
-	public GuiContainerBlueprint addSlot(SlotElement slot) {
-		return addSlot("main", slot);
+	public GuiContainerBlueprint addSlot(SlotElement slot, IItemHandler inventory) {
+		return addSlot("main", slot, inventory);
 	}
 
-	public GuiContainerBlueprint addSlot(ItemStackHandler inventory, SlotType type, int x, int y) {
+	public GuiContainerBlueprint addSlot(IItemHandler inventory, SlotType type, int x, int y) {
 		addSlot(inventory, type, x, y, (slot, stack) -> true);
 		return this;
 	}
 
-	public GuiContainerBlueprint addSlot(ItemStackHandler inventory, int x, int y) {
+	public GuiContainerBlueprint addSlot(IItemHandler inventory, int x, int y) {
 		return addSlot(inventory, SlotType.NORMAL, x, y);
 	}
 
-	public GuiBlueprint addSlot(ItemStackHandler inventory, SlotType type, int x, int y, ContrivitiveSlot.SlotFilter filter) {
-		addSlot(new SlotElement(inventory, x + type.getSlotOffsetX(), y + type.getSlotOffsetY(), type, filter));
+	public GuiBlueprint addSlot(IItemHandler inventory, SlotType type, int x, int y, ContrivitiveSlot.SlotFilter filter) {
+		addSlot(new SlotElement(x + type.getSlotOffsetX(), y + type.getSlotOffsetY(), type).setFilter(filter), inventory);
 		return this;
 	}
 
-	public GuiBlueprint addSlot(ItemStackHandler inventory, int x, int y, ContrivitiveSlot.SlotFilter filter) {
+	public GuiBlueprint addSlot(IItemHandler inventory, int x, int y, ContrivitiveSlot.SlotFilter filter) {
 		return addSlot(inventory, SlotType.NORMAL, x, y, filter);
 	}
 
@@ -105,5 +106,23 @@ public class GuiContainerBlueprint extends GuiBlueprint {
 
 	public GuiBlueprint addPlayerInventory(int x, int y) {
 		return addPlayerInventory("main", x, y);
+	}
+
+	public class SlotEntry {
+		private SlotElement element;
+		private IItemHandler inventory;
+
+		public SlotEntry(SlotElement element, IItemHandler inventory) {
+			this.element = element;
+			this.inventory = inventory;
+		}
+
+		public SlotElement getElement() {
+			return element;
+		}
+
+		public IItemHandler getInventory() {
+			return inventory;
+		}
 	}
 }

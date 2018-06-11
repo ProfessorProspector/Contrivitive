@@ -3,9 +3,11 @@ package contrivitive.gui;
 import contrivitive.gui.element.PositionedElement;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class ContrivitiveGuiContainer extends GuiContainer implements IContrivitiveGui<GuiContainer, GuiContainerBlueprint> {
 
+	public final EntityPlayer player;
 	private final GuiContainerBlueprint blueprint;
 	private Page currentPage;
 	private int offsetFactorX;
@@ -14,6 +16,7 @@ public class ContrivitiveGuiContainer extends GuiContainer implements IContrivit
 	public ContrivitiveGuiContainer(ContrivitiveContainer container) {
 		super(container);
 		this.blueprint = container.blueprint;
+		this.player = container.player;
 		this.xSize = blueprint.width;
 		this.ySize = blueprint.height;
 	}

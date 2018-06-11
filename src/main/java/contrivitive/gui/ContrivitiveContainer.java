@@ -1,7 +1,5 @@
 package contrivitive.gui;
 
-import contrivitive.gui.element.slot.PlayerSlotElement;
-import contrivitive.gui.element.slot.SlotElement;
 import contrivitive.util.ContrivitiveSlot;
 import contrivitive.util.Pair;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,13 +17,14 @@ import java.util.function.IntSupplier;
 
 public class ContrivitiveContainer extends Container {
 	public final GuiContainerBlueprint blueprint;
+	public final EntityPlayer player;
 	public final ArrayList<MutableTriple<IntSupplier, IntConsumer, Integer>> integerValues = new ArrayList<>();
 	public final ArrayList<MutableTriple<IntSupplier, IntConsumer, Short>> shortValues = new ArrayList<>();
 	private Integer[] integerParts;
 
 	public ContrivitiveContainer(GuiContainerBlueprint blueprint, EntityPlayer player) {
 		this.blueprint = blueprint;
-
+		this.player = player;
 		for (Pair<IntSupplier, IntConsumer> syncable : blueprint.shortSyncables)
 			this.shortValues.add(MutableTriple.of(syncable.getA(), syncable.getB(), (short) 0));
 		this.shortValues.trimToSize();
@@ -37,20 +36,20 @@ public class ContrivitiveContainer extends Container {
 
 		this.integerParts = new Integer[this.integerValues.size()];
 		addSlots();
-		addPlayerSlots(player);
+		addPlayerSlots();
 	}
 
 	private void addSlots() {
-		for (SlotElement slot : blueprint.slots) {
-			if (slot.getSlotId() >= 0) {
-				addSlotToContainer(new ContrivitiveSlot(slot.getSlotInventory(), slot.getSlotId(), slot.getSlotX(), slot.getSlotY()).setFilter(slot.filter));
+		for (int index : blueprint.slots.keySet()) {
+			if (index >= 0) {
+				addSlotToContainer(new ContrivitiveSlot(blueprint.slots.get(index).getInventory(), index, blueprint.slots.get(index).getElement().getSlotX(), blueprint.slots.get(index).getElement().getSlotY()).setFilter(blueprint.slots.get(index).getElement().getFilter()));
 			}
 		}
 	}
 
-	private void addPlayerSlots(EntityPlayer player) {
-		for (PlayerSlotElement slot : blueprint.playerSlots) {
-			addSlotToContainer(new Slot(player.inventory, slot.getIndex(), slot.getX(), slot.getY()));
+	private void addPlayerSlots() {
+		for (int index : blueprint.playerSlots.keySet()) {
+			addSlotToContainer(new Slot(player.inventory, index, blueprint.playerSlots.get(index).getX(), blueprint.playerSlots.get(index).getY()));
 		}
 	}
 
@@ -121,7 +120,9 @@ public class ContrivitiveContainer extends Container {
 
 	@Override
 	public void addListener(final IContainerListener listener) {
-		super.addListener(listener);
+		if (!blueprint.justPlayerInv) {
+			super.addListener(listener);
+		}
 
 		int i = 0;
 		if (!this.shortValues.isEmpty())
