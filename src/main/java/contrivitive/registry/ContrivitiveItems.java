@@ -1,7 +1,7 @@
 package contrivitive.registry;
 
 import contrivitive.Contrivitive;
-import contrivitive.ItemExample;
+import contrivitive.ItemManual;
 import net.minecraft.item.Item;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class ContrivitiveItems {
 	protected static final ArrayList<Item> ITEMS = new ArrayList<>();
 
-	public static final Item EXAMPLE = register(new ItemExample());
+	public static final Item EXAMPLE = register(new ItemManual());
 
 	public static Item register(Item item) {
 		item.setCreativeTab(Contrivitive.TAB);

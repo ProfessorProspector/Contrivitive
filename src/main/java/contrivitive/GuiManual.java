@@ -1,15 +1,17 @@
-package contrivitive.gui;
+package contrivitive;
 
+import contrivitive.gui.ContrivitiveGuiScreen;
+import contrivitive.gui.GuiBlueprint;
 import contrivitive.gui.element.Coordinate;
 import contrivitive.gui.element.Element;
 import contrivitive.gui.element.sprite.AnimatedSprite;
 import contrivitive.gui.element.sprite.AnimationFrame;
 import contrivitive.gui.element.sprite.Sprites;
 
-public class ExampleGui extends ContrivitiveGuiScreen {
+public class GuiManual extends ContrivitiveGuiScreen {
 
-	public ExampleGui() {
-		super(new GuiBlueprint(200, 100)
+	public GuiManual() {
+		super(new GuiBlueprint(300, 250)
 			.at(10, 10, new Element().sprite(Sprites.SLOT_NORMAL))
 			.at(10, 30, new Element().sprite(new AnimatedSprite(18, 18,
 					new AnimationFrame(Sprites.SLOT_NORMAL, 20),

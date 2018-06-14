@@ -6,7 +6,6 @@ import contrivitive.gui.element.slot.SlotType;
 import contrivitive.util.ContrivitiveSlot;
 import contrivitive.util.Pair;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.HashMap;
 import java.util.function.IntConsumer;

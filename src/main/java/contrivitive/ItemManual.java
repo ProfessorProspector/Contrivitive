@@ -8,10 +8,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-public class ItemExample extends Item {
-	public ItemExample() {
-		setRegistryName(ContrivitiveConstants.MOD_ID, "example");
-		setUnlocalizedName(ContrivitiveConstants.MOD_ID + ".example");
+public class ItemManual extends Item {
+	public ItemManual() {
+		setRegistryName(ContrivitiveConstants.MOD_ID, "manual");
+		setUnlocalizedName(ContrivitiveConstants.MOD_ID + ".manual");
 	}
 
 	@Override
