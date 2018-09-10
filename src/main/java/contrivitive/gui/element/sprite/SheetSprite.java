@@ -1,7 +1,9 @@
 package contrivitive.gui.element.sprite;
 
+import contrivitive.gui.GuiBlueprint;
 import contrivitive.gui.IContrivitiveGui;
-import contrivitive.util.RenderUtils;
+import contrivitive.util.RenderUtil;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
 public class SheetSprite extends Sprite {
@@ -21,7 +23,7 @@ public class SheetSprite extends Sprite {
 	}
 
 	@Override
-	public void draw(IContrivitiveGui gui, int x, int y, float elapsedTicks) {
-		RenderUtils.drawRectFromSheet(gui, sheet, x + offsetX, y + offsetY, this.textureX, this.textureY, width, height);
+	public <G extends GuiScreen, B extends GuiBlueprint> void draw(IContrivitiveGui<G,B> gui, int x, int y, float elapsedTicks) {
+		RenderUtil.drawRectFromSheet(gui, sheet, x + offsetX, y + offsetY, this.textureX, this.textureY, width, height);
 	}
 }

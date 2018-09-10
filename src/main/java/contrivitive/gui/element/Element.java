@@ -1,17 +1,16 @@
 package contrivitive.gui.element;
 
-import contrivitive.Contrivitive;
 import contrivitive.gui.GuiBlueprint;
 import contrivitive.gui.IContrivitiveGui;
 import contrivitive.gui.element.sprite.Sprite;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Element<B extends GuiBlueprint> {
-	public B blueprint;
+public class Element {
 	public int width = 0;
 	public int height = 0;
 
@@ -26,13 +25,15 @@ public class Element<B extends GuiBlueprint> {
 	public boolean isDraggingLast = false;
 	public boolean isPressingLast = false;
 	public boolean isReleasingLast = false;
-	public List<InteractionAction<B>> hoverActions = new ArrayList<>();
-	public List<InteractionAction<B>> dragActions = new ArrayList<>();
-	public List<InteractionAction<B>> startPressActions = new ArrayList<>();
-	public List<InteractionAction<B>> pressActions = new ArrayList<>();
-	public List<InteractionAction<B>> releaseActions = new ArrayList<>();
-
-	public List<UpdateAction<B>> updateActions = new ArrayList<>();
+	public boolean buttonClick = true;
+	public InteractionAction drawTooltip = (element, gui, coordinates, mouseX, mouseY) -> {
+	};
+	public List<InteractionAction> hoverActions = new ArrayList<>();
+	public List<InteractionAction> dragActions = new ArrayList<>();
+	public List<InteractionAction> startPressActions = new ArrayList<>();
+	public List<InteractionAction> pressActions = new ArrayList<>();
+	public List<InteractionAction> releaseActions = new ArrayList<>();
+	public List<UpdateAction> updateActions = new ArrayList<>();
 
 	public Element() {
 	}
@@ -56,20 +57,34 @@ public class Element<B extends GuiBlueprint> {
 		sprites.add(sprite);
 	}
 
-	public void draw(IContrivitiveGui gui, int x, int y, int mouseX, int mouseY, float elapsedTicks) {
+	@SideOnly(Side.CLIENT)
+	public <G extends GuiScreen, B extends GuiBlueprint> void draw(IContrivitiveGui<G,B> gui, int x, int y, int mouseX, int mouseY, float elapsedTicks) {
 		for (RelativeSprite sprite : sprites) {
 			sprite.sprite.draw(gui, x + sprite.relativePos.x, y + sprite.relativePos.y, elapsedTicks);
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public interface InteractionAction<B extends GuiBlueprint> {
-		void execute(Element<B> element, Contrivitive gui, int mouseX, int mouseY);
+	public void initClient() {
+
 	}
 
 	@SideOnly(Side.CLIENT)
-	public interface UpdateAction<B extends GuiBlueprint> {
-		void update(Element<B> element, Contrivitive gui);
+	public void renderUpdate(IContrivitiveGui<?,?> gui) {
+		isHoveringLast = isHovering;
+		isPressingLast = isPressing;
+		isDraggingLast = isDragging;
+		isReleasingLast = isReleasing;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public interface InteractionAction {
+		void execute(Element element, IContrivitiveGui<?,?> gui, Coordinate coordinate, int mouseX, int mouseY);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public interface UpdateAction {
+		void update(Element element, IContrivitiveGui<?,?> gui);
 	}
 
 	public class RelativeSprite {
