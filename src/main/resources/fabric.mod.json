@@ -1,0 +1,9 @@
+{
+  "id": "contrivitive",
+  "name": "Contrivitive API",
+  "version": "0.1.0",
+  "side": "universal",
+  "initializers": [ ],
+  "description": "A gui lib that lets you contrive guis from json (mostly)",
+  "mixins": { }
+}
